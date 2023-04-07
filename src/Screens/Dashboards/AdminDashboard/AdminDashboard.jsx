@@ -18,13 +18,19 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import RegisterationForm from './RegisterationForm';
-import { Route, Routes, useNavigate } from 'react-router-dom';
-import Institute from './Institute';
+import ColorLensIcon from '@mui/icons-material/ColorLens';
+
+
+import { BrowserRouter, Routes, Route, Link, useNavigate } from "react-router-dom";
+
+import { Institute } from "./Pages/Institute";
+import { InstituteForm } from "./Pages/Instituteform";
+import { UserRegister } from "./Pages/UserRegister";
+import { Theme } from "./Pages/Theme";
+import { Payment } from "./Pages/Payment";
 
 const drawerWidth = 240;
 
-// let menulist = ['Institute ', 'Registeration form', 'User Register']
 const openedMixin = (theme) => ({
   width: drawerWidth,
   transition: theme.transitions.create('width', {
@@ -91,35 +97,50 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 );
 
 export default function MiniDrawer() {
-  const menulist =
-[
-  {
-    name: "Institute",
-    route: "Institute"
-  },
-  {
-    name: "Registeration form",
-    route: "RegisterationForm"
+
+  const links =[
+    {
+      name: "Institute",
+      path: "institute"
+    },
+    {
+      name: "Institute Form",
+      path: "instituteForm"
+    },
+    {
+      name: "Register User",
+      path: "userRegister"
+    }
+  ];
+
+  const subLinks =[
+    {
+      name: "Set Theme",
+      path: "theme"
+    },
+    {
+      name: "Activation And Payment Details",
+      path: "payment"
+    }
+  ];
+
+  const navigate = useNavigate();
+
+  const changeScreen = (route) => {
+    navigate(`${route}`);
   }
-]
-let navigate = useNavigate();
-let changeScreen = (route) => {
-navigate(`${route}`)
-}
+
   const theme = useTheme();
-  const [open, setOpen] = React.useState(false);
+  const [open, setOpen] = React.useState(true);
 
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+  const handleDrawerOpen = () => { setOpen(true); };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+  const handleDrawerClose = () => { setOpen(false); };
 
   return (
     <Box sx={{ display: 'flex' }}>
       <CssBaseline />
+
       <AppBar position="fixed" open={open}>
         <Toolbar>
           <IconButton
@@ -135,10 +156,11 @@ navigate(`${route}`)
             <MenuIcon />
           </IconButton>
           <Typography variant="h6" noWrap component="div">
-            Institute Dashboard
+            Admin Dashboard
           </Typography>
         </Toolbar>
       </AppBar>
+
       <Drawer variant="permanent" open={open}>
         <DrawerHeader>
           <IconButton onClick={handleDrawerClose}>
@@ -147,9 +169,8 @@ navigate(`${route}`)
         </DrawerHeader>
         <Divider />
         <List>
-        
-          {menulist.map((text, index) => (
-            <ListItem onClick={() => changeScreen(text.route)} key={text.name} disablePadding sx={{ display: 'block' }}>
+        {links.map((linkItem, index) => (
+            <ListItem onClick={() => {changeScreen(linkItem.path)}} key={index} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -166,15 +187,17 @@ navigate(`${route}`)
                 >
                   {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text.name} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={linkItem.name} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
+
             </ListItem>
           ))}
         </List>
         <Divider />
         <List>
-          {['Activation and payment details'].map((text, index) => (
-            <ListItem key={text} disablePadding sx={{ display: 'block' }}>
+          
+        {subLinks.map((subLinkItem, index) => (
+            <ListItem onClick={() => {changeScreen(subLinkItem.path)}} key={index} disablePadding sx={{ display: 'block' }}>
               <ListItemButton
                 sx={{
                   minHeight: 48,
@@ -189,22 +212,27 @@ navigate(`${route}`)
                     justifyContent: 'center',
                   }}
                 >
-                  {index % 2 === 0 ? <InboxIcon /> : <MailIcon />}
+                  {index % 2 === 0 ? <ColorLensIcon /> : <MailIcon />}
                 </ListItemIcon>
-                <ListItemText primary={text} sx={{ opacity: open ? 1 : 0 }} />
+                <ListItemText primary={subLinkItem.name} sx={{ opacity: open ? 1 : 0 }} />
               </ListItemButton>
+
             </ListItem>
           ))}
+
         </List>
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <DrawerHeader />
         <Routes>
-          <Route path="/" element={<Institute />} />
-          <Route path="/Institute" element={<Institute />} />
-          <Route path="/RegisterationForm" element={<RegisterationForm />} />
-        </Routes>
- 
+            <Route path="/" element={<Institute/>}></Route>
+            <Route path="/institute" element={<Institute/>}></Route>
+            <Route path="/instituteForm" element={<InstituteForm/>}></Route>
+            <Route path="/userRegister" element={<UserRegister/>}></Route>
+            <Route path="/theme" element={<Theme/>}></Route>
+            <Route path="/payment" element={<Payment/>}></Route>
+
+          </Routes>
       </Box>
     </Box>
   );
